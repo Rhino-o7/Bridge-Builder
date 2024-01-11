@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08c7ee282d4130045a1225649066596f, type: 3}
+  m_Name: TestOps
+  m_EditorClassIdentifier: 
+  mapSize: 100
+  maxWaterStrength: 30
+  minWaterStrength: 15
+  waterBodyDegregations:
+  - c0:
+      x: 1
+      y: 1
+    c1:
+      x: 3
+      y: 3
+  - c0:
+      x: 2
+      y: 1
+    c1:
+      x: 4
+      y: 2
+  - c0:
+      x: 2
+      y: 4
+    c1:
+      x: 4
+      y: 5
+  waterDensityRange: {x: 10, y: 10}
+  noiseWaterCap: 0.8
