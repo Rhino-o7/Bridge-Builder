@@ -10,6 +10,8 @@ public class BlockGen : MonoBehaviour
     
     [SerializeField] Tilemap groundMap;
     [SerializeField] public Tilemap waterMap;
+    [SerializeField] public Tilemap colMap;
+    [SerializeField] TileBase colTile;
     [SerializeField] TileBase[] tileArray;
     public TileTrait[,] tileTraits;
     float[,] noiseMap;
@@ -144,6 +146,7 @@ public class BlockGen : MonoBehaviour
                     }else{
                         _thisType = BlockType.WATER;
                     }
+                    colMap.SetTile(new Vector3Int(col,row,0), colTile);
                     waterMap.SetTile(new Vector3Int(col,row,0), tileArray[BlockPicker.GetBlockIndex(_thisType)]);
                     continue;
                 }else{
