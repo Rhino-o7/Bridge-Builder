@@ -15,33 +15,36 @@ public class BlockGen : MonoBehaviour
     [SerializeField] TileBase[] tileArray;
     public TileTrait[,] tileTraits;
     float[,] noiseMap;
-    public static Vector2Int startPos;
-    public static Vector2Int endPos;
+    public static Vector2 startPos;
 
     [HideInInspector]
     public static int mapSize;
     void Awake(){
+        mapSize = genOptions.mapSize;
+    }
+
+    public void StartLevel(){
+        
+        groundMap.ClearAllTiles();
+        waterMap.ClearAllTiles();
+        colMap.ClearAllTiles();
+
         noiseMapObj.GenerateNoiseMap();
         noiseMap = noiseMapObj.noiseMap;
-
-        mapSize = genOptions.mapSize;
         tileTraits = new TileTrait[mapSize,mapSize];
         for (int i=0; i<mapSize; i++){
             for (int j=0; j<mapSize; j++){
                 tileTraits[j,i] = new TileTrait();
             }
         }
-    }
-    void Start(){
     
         GenNoiseMap();
         GenBlocks();
-        GenStartGoal();
-        
+        startPos = GetRandLandPos();
     }
 
     BlockType GetBlockTypeIndex(TileType[,] _x3){
-        bool _top = false, _bottom = false, _left = false, _right = false, _ctl = false, _ctr = false, _cbl = false, _cbr = false;
+        bool _top = false, _bottom = false, _left = false, _right = false, _cbl = false, _cbr = false;
         List<Vector2> waterTiles = new List<Vector2>();
         for (int i=0; i<3; i++){
             for (int j=0; j<3;j++){
@@ -62,12 +65,6 @@ public class BlockGen : MonoBehaviour
         }
         if (waterTiles.Contains(new Vector2(2,1))){
             _right = true;
-        }
-        if (waterTiles.Contains(new Vector2(0,2))){
-            _ctl = true;
-        }
-        if (waterTiles.Contains(new Vector2(2,2))){
-            _ctr = true;
         }
         if (waterTiles.Contains(new Vector2(0,0))){
             _cbl = true;
@@ -167,22 +164,24 @@ public class BlockGen : MonoBehaviour
                 }
                 
                 groundMap.SetTile(new Vector3Int(col,row,0), tileArray[BlockPicker.GetBlockIndex(_thisType)]);
+                
             }
         }
     }
 
 
     void GenNoiseMap(){
-        for (int i=0; i<noiseMap.GetLength(0); i++){
-            for (int j=0; j<noiseMap.GetLength(1); j++){
+        for (int i=0; i<mapSize; i++){
+            for (int j=0; j<mapSize; j++){
                 
                 if (noiseMap[j,i] > genOptions.noiseWaterCap){
+                    
                     tileTraits[j,i].tileType = TileType.WATER;
                 }
             }
         }
     }
-    void GenStartGoal(){
+    public Vector2Int GetRandLandPos(){
         List<Vector2Int> landPoints = new List<Vector2Int>();
         for (int i=0;i<mapSize; i++){
             for (int j=0; j<mapSize; j++){
@@ -191,17 +190,9 @@ public class BlockGen : MonoBehaviour
                 }
             }
         }
-      
-        int _randS = 0; 
-        int _RandE = 0;
-        while (_randS == _RandE){
-           _randS = Random.Range(0,landPoints.Count);
-           _RandE = Random.Range(0,landPoints.Count);
-        }
+        int _randIndex = Random.Range(0,landPoints.Count);
+        return landPoints[_randIndex];
 
-        startPos = landPoints[_randS];
-        endPos = landPoints[_RandE];
-        print(startPos + ", End: " + endPos);
     }
     
 }

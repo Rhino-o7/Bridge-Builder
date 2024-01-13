@@ -14,6 +14,7 @@ public class BridgeBuilder : MonoBehaviour
     [SerializeField] TileBase hoverTile;
     [SerializeField] int cols = 3;
     [SerializeField] public LayerMask tileLayerMask;
+    public int bridgeCount;
     Inputs inputs;
     BlockGen blockGen;
     BridgeBlock[,] bridgeGrid;
@@ -26,7 +27,9 @@ public class BridgeBuilder : MonoBehaviour
         inputs.Player.L_Click.performed += Click;
     }
     
-    void Start(){
+    public void StartBridge(){
+        tilemap.ClearAllTiles();
+
         mapSize = BlockGen.mapSize;
         bridgeGrid = new BridgeBlock[mapSize,mapSize];
         for (int i=0; i<mapSize; i++){
@@ -59,7 +62,7 @@ public class BridgeBuilder : MonoBehaviour
         Vector2 _mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2Int _clickPos = new Vector2Int((int)_mousePos.x, (int)_mousePos.y);
         if (_mousePos.x >0 && _mousePos.x <mapSize && _mousePos.y >= 0 && _mousePos.y < mapSize 
-        && blockGen.tileTraits[_clickPos.x,  _clickPos.y].tileType == TileType.WATER && tilemap.GetTile(new Vector3Int(_clickPos.x, _clickPos.y, 0)) == null){
+        && blockGen.tileTraits[_clickPos.x,  _clickPos.y].tileType == TileType.WATER && tilemap.GetTile(new Vector3Int(_clickPos.x, _clickPos.y, 0)) == null && bridgeCount > 0){
             PlaceBridge(_clickPos);
         }
         
@@ -73,6 +76,8 @@ public class BridgeBuilder : MonoBehaviour
         PlaceBlockTile(_pos);
         UpdateNearBridges(_pos);
         blockGen.colMap.SetTile(new Vector3Int(_pos.x, _pos.y,0), null);
+        bridgeCount--;
+        LevelMgr.levelMgr.SetBridges(bridgeCount);
     }   
    
     void PlaceBlockTile(Vector2Int _pos){

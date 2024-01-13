@@ -12,27 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08c7ee282d4130045a1225649066596f, type: 3}
   m_Name: TestOps
   m_EditorClassIdentifier: 
-  mapSize: 100
-  maxWaterStrength: 30
-  minWaterStrength: 15
-  waterBodyDegregations:
-  - c0:
-      x: 1
-      y: 1
-    c1:
-      x: 3
-      y: 3
-  - c0:
-      x: 2
-      y: 1
-    c1:
-      x: 4
-      y: 2
-  - c0:
-      x: 2
-      y: 4
-    c1:
-      x: 4
-      y: 5
-  waterDensityRange: {x: 10, y: 10}
+  mapSize: 25
   noiseWaterCap: 0.8

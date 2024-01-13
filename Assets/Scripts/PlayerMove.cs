@@ -26,8 +26,8 @@ public class PlayerMove : MonoBehaviour
         inputs.Player.Walk.performed += Move;
     }
 
-    void Start(){
-        transform.position = new Vector3(BlockGen.startPos.x, BlockGen.startPos.y+0.5f, 0);
+    public void StartPos(){
+        transform.position = new Vector3(BlockGen.startPos.x+0.5f, BlockGen.startPos.y + 1.2f, 0);
     }
 
     void Move(InputAction.CallbackContext _c){

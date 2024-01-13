@@ -14,20 +14,13 @@ public class NoiseMap : MonoBehaviour
     public Gradient colorGradient;
     public float[,] noiseMap;
 
-    void Start()
-    {
-        
-       
-    }
-
-    
-
     public void GenerateNoiseMap()
     {
-        if (seed == Vector2.zero){
-            seed.x = Random.Range(0,5000);
-            seed.y = Random.Range(0,5000);
-        }
+        
+        seed.x = Random.Range(0,9000);
+        seed.y = Random.Range(0,9000);
+        print(seed);
+        
         noiseMap = new float[width, height];
 
         for (int y = 0; y < height; y++)
@@ -52,7 +45,7 @@ public class NoiseMap : MonoBehaviour
             }
         }
 
-        VisualizeNoiseMap(noiseMap);
+        //VisualizeNoiseMap(noiseMap);
     }
 
     void VisualizeNoiseMap(float[,] noiseMap)
