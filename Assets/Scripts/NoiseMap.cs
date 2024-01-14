@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class NoiseMap : MonoBehaviour
 {
-    public int width = 256;
-    public int height = 256;
-    public float scale = 20f;
+    int width = 256;
+    int height = 256;
+    public float scale = 15f;
     public int octaves = 6;
     public float persistence = 0.5f;
     public float lacunarity = 2f;
@@ -14,12 +14,14 @@ public class NoiseMap : MonoBehaviour
     public Gradient colorGradient;
     public float[,] noiseMap;
 
-    public void GenerateNoiseMap()
+    public void GenerateNoiseMap(int _size)
     {
+        width = _size;
+        height = _size;
+        float tmpScale = scale * (width / 100f);
         
         seed.x = Random.Range(0,9000);
         seed.y = Random.Range(0,9000);
-        print(seed);
         
         noiseMap = new float[width, height];
 
@@ -27,8 +29,9 @@ public class NoiseMap : MonoBehaviour
         {
             for (int x = 0; x < width; x++)
             {
-                float xCoord = (float)x / width * scale + seed.x;
-                float yCoord = (float)y / height * scale + seed.y;
+                float xCoord = (float)x / width * tmpScale + seed.x;
+                float yCoord = (float)y / height * tmpScale + seed.y;
+                
 
                 float perlinValue = 0f;
                 float amplitude = 1f;

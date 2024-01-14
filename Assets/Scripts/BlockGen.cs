@@ -5,11 +5,12 @@ using UnityEngine.Tilemaps;
 //namespace UnityEngine{
 public class BlockGen : MonoBehaviour
 {
-    [SerializeField] GenOptions genOptions;
+    public GenOptions genOptions;
     [SerializeField] NoiseMap noiseMapObj;
     
     [SerializeField] Tilemap groundMap;
     [SerializeField] public Tilemap waterMap;
+    [SerializeField] Tilemap outsideMap;
     [SerializeField] public Tilemap colMap;
     [SerializeField] TileBase colTile;
     [SerializeField] TileBase[] tileArray;
@@ -28,8 +29,9 @@ public class BlockGen : MonoBehaviour
         groundMap.ClearAllTiles();
         waterMap.ClearAllTiles();
         colMap.ClearAllTiles();
+        outsideMap.ClearAllTiles();
 
-        noiseMapObj.GenerateNoiseMap();
+        noiseMapObj.GenerateNoiseMap(mapSize);
         noiseMap = noiseMapObj.noiseMap;
         tileTraits = new TileTrait[mapSize,mapSize];
         for (int i=0; i<mapSize; i++){
@@ -40,6 +42,7 @@ public class BlockGen : MonoBehaviour
     
         GenNoiseMap();
         GenBlocks();
+        GenOutSideMap();
         startPos = GetRandLandPos();
     }
 
@@ -193,6 +196,17 @@ public class BlockGen : MonoBehaviour
         int _randIndex = Random.Range(0,landPoints.Count);
         return landPoints[_randIndex];
 
+    }
+
+    void GenOutSideMap(){
+        for (int c=0; c<mapSize+20; c++){
+            for (int r=0; r<mapSize+20; r++){
+                if (r >= 10 && r < mapSize+10 && c >= 10 && c < mapSize+10 ){
+                    continue;
+                }
+                outsideMap.SetTile(new Vector3Int(c,r,0), tileArray[BlockPicker.GetBlockIndex(BlockType.WATER)]);
+            }
+        }
     }
     
 }

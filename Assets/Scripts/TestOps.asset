@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08c7ee282d4130045a1225649066596f, type: 3}
   m_Name: TestOps
   m_EditorClassIdentifier: 
-  mapSize: 25
+  mapSize: 100
   noiseWaterCap: 0.8

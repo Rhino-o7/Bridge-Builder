@@ -83,8 +83,8 @@ public class LevelMgr : MonoBehaviour
         
     }
     void Enter(InputAction.CallbackContext _c){
-        
-        enterFunction();
+        enterFunction?.Invoke();
+
     }
     void ShowStartMenu(){
         currentLevel = 1;
@@ -146,6 +146,7 @@ public class LevelMgr : MonoBehaviour
     void EndGame(){
         
         ShowGameOverMenu();
+        BlockGen.mapSize = blockGen.genOptions.mapSize;
         enterFunction = ShowStartMenu;
         
     }
