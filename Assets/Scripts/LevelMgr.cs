@@ -19,6 +19,8 @@ public class LevelMgr : MonoBehaviour
     [SerializeField] GameObject PetCounter;
     [SerializeField] GameObject BridgeCounter;
     [SerializeField] GameObject CatPrefab;
+    AudioSource source;
+    bool playingMusic;
     List<GameObject> cats;
     
     TextMeshProUGUI petTxt;
@@ -41,6 +43,7 @@ public class LevelMgr : MonoBehaviour
         inputs.Player.Enter.performed += Enter;
         petTxt = PetCounter.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
         bridgeTxt = BridgeCounter.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
+        source = GetComponent<AudioSource>();
 
     }
 
@@ -92,6 +95,8 @@ public class LevelMgr : MonoBehaviour
         lvlImg.SetActive(false);
         endImg.SetActive(false);
         enterFunction = ShowLevelMenu;
+        source.Play();
+        playingMusic = true;
     }
     void ShowLevelMenu(){
         startImg.SetActive(false);
@@ -99,6 +104,9 @@ public class LevelMgr : MonoBehaviour
         endImg.SetActive(false);
         lvlTxt.text = "LEVEL " + currentLevel;
         enterFunction = StartLevel;
+        if (!playingMusic){
+            source.Play();
+        }
     }
     void ShowGameOverMenu(){
         startImg.SetActive(false);
@@ -129,6 +137,8 @@ public class LevelMgr : MonoBehaviour
         bridgeBuilder.StartBridge();
         SpawnCats(Random.Range(currentLevel, (int)(currentLevel*1.5f)));
         enterFunction = null;
+        source.Stop();
+        playingMusic = false;
     }
 
     public void EndLevel(bool _passed){
