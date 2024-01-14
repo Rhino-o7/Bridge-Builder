@@ -17,8 +17,14 @@ public class Animal : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D c){
         if (c.gameObject.CompareTag("Player")){
+            animator.SetTrigger("CatFound");
             LevelMgr.levelMgr.AddCatFound();
             gameObject.GetComponent<Collider2D>().enabled = false;
         }
     }
+
+    public void FoundEnd(){
+        gameObject.SetActive(false);
+    }
+
 }

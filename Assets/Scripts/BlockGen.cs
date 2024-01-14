@@ -238,7 +238,7 @@ public class BlockGen : MonoBehaviour
             GameObject g = new GameObject();
             g.transform.position = new Vector3(ranPos.x+0.5f, ranPos.y+1, 0);
             SpriteRenderer r = g.AddComponent<SpriteRenderer>();
-            r.sprite = rocks[Random.Range(0, rocks.Length-1)];
+            r.sprite = rocks[Random.Range(0, rocks.Length)];
             rockList.Add(g);
 
         }
