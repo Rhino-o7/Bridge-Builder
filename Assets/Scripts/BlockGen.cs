@@ -14,6 +14,9 @@ public class BlockGen : MonoBehaviour
     [SerializeField] public Tilemap colMap;
     [SerializeField] TileBase colTile;
     [SerializeField] TileBase[] tileArray;
+    [SerializeField] Tilemap xtraMap;
+    [SerializeField] Sprite[] rocks;
+    List<GameObject> rockList;
     public TileTrait[,] tileTraits;
     float[,] noiseMap;
     public static Vector2 startPos;
@@ -22,6 +25,7 @@ public class BlockGen : MonoBehaviour
     public static int mapSize;
     void Awake(){
         mapSize = genOptions.mapSize;
+        rockList = new List<GameObject>();
     }
 
     public void StartLevel(){
@@ -30,6 +34,10 @@ public class BlockGen : MonoBehaviour
         waterMap.ClearAllTiles();
         colMap.ClearAllTiles();
         outsideMap.ClearAllTiles();
+        foreach (GameObject g in rockList){
+            Destroy(g);
+        }
+        rockList.Clear();
 
         noiseMapObj.GenerateNoiseMap(mapSize);
         noiseMap = noiseMapObj.noiseMap;
@@ -43,6 +51,7 @@ public class BlockGen : MonoBehaviour
         GenNoiseMap();
         GenBlocks();
         GenOutSideMap();
+        GenRocks();
         startPos = GetRandLandPos();
     }
 
@@ -197,6 +206,19 @@ public class BlockGen : MonoBehaviour
         return landPoints[_randIndex];
 
     }
+    public Vector2Int GetRandWaterPos(){
+        List<Vector2Int> landPoints = new List<Vector2Int>();
+        for (int i=0;i<mapSize; i++){
+            for (int j=0; j<mapSize; j++){
+                if (tileTraits[j,i].tileType == TileType.WATER){
+                    landPoints.Add(new Vector2Int(j,i));
+                }
+            }
+        }
+        int _randIndex = Random.Range(0,landPoints.Count);
+        return landPoints[_randIndex];
+
+    }
 
     void GenOutSideMap(){
         for (int c=0; c<mapSize+20; c++){
@@ -206,6 +228,19 @@ public class BlockGen : MonoBehaviour
                 }
                 outsideMap.SetTile(new Vector3Int(c,r,0), tileArray[BlockPicker.GetBlockIndex(BlockType.WATER)]);
             }
+        }
+    }
+
+    void GenRocks(){
+        int rockCount = Random.Range(1, mapSize);
+        for (int i=0; i<rockCount; i++){
+            Vector2Int ranPos = GetRandWaterPos();
+            GameObject g = new GameObject();
+            g.transform.position = new Vector3(ranPos.x+0.5f, ranPos.y+1, 0);
+            SpriteRenderer r = g.AddComponent<SpriteRenderer>();
+            r.sprite = rocks[Random.Range(0, rocks.Length-1)];
+            rockList.Add(g);
+
         }
     }
     
