@@ -9,5 +9,6 @@ public class GenOptions : ScriptableObject
     [Header("Map Options")]
     public int mapSize = 100;
     public float noiseWaterCap = 1f;
+    public float rockMult = 1f;
 
 }

@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+
 //using System.Numerics;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -20,7 +22,9 @@ public class BridgeBuilder : MonoBehaviour
     BridgeBlock[,] bridgeGrid;
     int mapSize;
     Vector2Int lastMousePos;
+    AudioSource audioSource;
     void Awake(){
+        audioSource = GetComponent<AudioSource>();
         blockGen = GetComponent<BlockGen>();
         inputs = new Inputs();
         inputs.Player.Enable();
@@ -45,10 +49,10 @@ public class BridgeBuilder : MonoBehaviour
     void Update(){
         Vector2 _pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2Int _mousePos = new Vector2Int((int)_pos.x, (int)_pos.y);
-        if (_mousePos.x >0 && _mousePos.x <mapSize && _mousePos.y >= 0 && _mousePos.y < mapSize){
+        if (_mousePos.x >= 0 && _mousePos.x <mapSize && _mousePos.y >= 0 && _mousePos.y < mapSize){
             if (_mousePos != lastMousePos){
                 hoverMap.SetTile(new Vector3Int(lastMousePos.x, lastMousePos.y, 0), null);
-                if (blockGen.tileTraits[_mousePos.x, _mousePos.y].tileType == TileType.WATER){
+                if (blockGen.tileTraits[_mousePos.x, _mousePos.y].tileType == TileType.WATER && blockGen.xtraMap.GetTile(new Vector3Int(_mousePos.x, _mousePos.y, 0)) == null){
 
                     hoverMap.SetTile(new Vector3Int(_mousePos.x, _mousePos.y, 0), hoverTile);
                     
@@ -62,7 +66,8 @@ public class BridgeBuilder : MonoBehaviour
         Vector2 _mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2Int _clickPos = new Vector2Int((int)_mousePos.x, (int)_mousePos.y);
         if (_mousePos.x >0 && _mousePos.x <mapSize && _mousePos.y >= 0 && _mousePos.y < mapSize 
-        && blockGen.tileTraits[_clickPos.x,  _clickPos.y].tileType == TileType.WATER && tilemap.GetTile(new Vector3Int(_clickPos.x, _clickPos.y, 0)) == null && bridgeCount > 0){
+        && blockGen.tileTraits[_clickPos.x,  _clickPos.y].tileType == TileType.WATER && tilemap.GetTile(new Vector3Int(_clickPos.x, _clickPos.y, 0)) == null && bridgeCount > 0
+        && blockGen.xtraMap.GetTile(new Vector3Int((int)_mousePos.x, (int)_mousePos.y, 0)) == null){
             PlaceBridge(_clickPos);
         }
         
@@ -73,6 +78,7 @@ public class BridgeBuilder : MonoBehaviour
    
     
     public void PlaceBridge(Vector2Int _pos){
+        audioSource.Play();
         PlaceBlockTile(_pos);
         UpdateNearBridges(_pos);
         blockGen.colMap.SetTile(new Vector3Int(_pos.x, _pos.y,0), null);
@@ -172,6 +178,13 @@ public class BridgeBuilder : MonoBehaviour
         int blockCol = Random.Range(0,cols); //Random Varient of block
         int shapeIndex = (blockRow * cols) + blockCol;
         return shapeIndex; 
+    }
+
+    void OnDisable(){
+        inputs.Player.L_Click.performed -= Click;
+    }
+    void OnEnable(){
+        inputs.Player.L_Click.performed += Click;
     }
 
     

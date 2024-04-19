@@ -163,8 +163,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 972a9f45a7208eb4aab8ec611db370c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meow: {fileID: 8300000, guid: 578157cce7b7eda42957ff974397b6c9, type: 3}
+  meow:
+  - {fileID: 8300000, guid: 578157cce7b7eda42957ff974397b6c9, type: 3}
+  - {fileID: 8300000, guid: 61c32aaeba827bd408aeb8c88b37ddc2, type: 3}
+  - {fileID: 8300000, guid: 2ce93172b9a459944ac8c59055e7aeec, type: 3}
   found: {fileID: 8300000, guid: de53c691c4b07074b9b5c1e34b6c4d5a, type: 3}
+  soundWave: {fileID: 6977011304648223866, guid: 39c621ac855d04948bd2caf663936c19, type: 3}
 --- !u!95 &3925532901640391716
 Animator:
   serializedVersion: 5
@@ -198,16 +202,16 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.745
   m_Pitch: 1
   Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
   Priority: 128
-  DopplerLevel: 1
+  DopplerLevel: 1.24
   MinDistance: 1
-  MaxDistance: 50
+  MaxDistance: 30
   Pan2D: 0
   rolloffMode: 1
   BypassEffects: 0

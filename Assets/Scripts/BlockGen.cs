@@ -12,9 +12,12 @@ public class BlockGen : MonoBehaviour
     [SerializeField] public Tilemap waterMap;
     [SerializeField] Tilemap outsideMap;
     [SerializeField] public Tilemap colMap;
+    [SerializeField] public Tilemap xtraMap;
+    
     [SerializeField] TileBase colTile;
     [SerializeField] TileBase[] tileArray;
-    [SerializeField] Tilemap xtraMap;
+    [SerializeField] TileBase[] rockTiles;
+    
     [SerializeField] Sprite[] rocks;
     List<GameObject> rockList;
     public TileTrait[,] tileTraits;
@@ -34,6 +37,7 @@ public class BlockGen : MonoBehaviour
         waterMap.ClearAllTiles();
         colMap.ClearAllTiles();
         outsideMap.ClearAllTiles();
+        xtraMap.ClearAllTiles();
         foreach (GameObject g in rockList){
             Destroy(g);
         }
@@ -226,23 +230,31 @@ public class BlockGen : MonoBehaviour
                 if (r >= 10 && r < mapSize+10 && c >= 10 && c < mapSize+10 ){
                     continue;
                 }
+                if (r == 9 || r == mapSize+10  || c == 9 || c == mapSize+10){
+                    
+                }
                 outsideMap.SetTile(new Vector3Int(c,r,0), tileArray[BlockPicker.GetBlockIndex(BlockType.WATER)]);
+                
+                if (r < 9 || r > mapSize+10 || c < 9 || c > mapSize+10){
+                    continue;
+                }
+                SpawnRock(new Vector2Int(r,c),0);
             }
         }
     }
 
     void GenRocks(){
-        int rockCount = Random.Range(1, mapSize);
+        int rockCount = (int)(Random.Range(3, mapSize) * genOptions.rockMult); 
         for (int i=0; i<rockCount; i++){
             Vector2Int ranPos = GetRandWaterPos();
-            GameObject g = new GameObject();
-            g.transform.position = new Vector3(ranPos.x+0.5f, ranPos.y+1, 0);
-            SpriteRenderer r = g.AddComponent<SpriteRenderer>();
-            r.sortingOrder = 1;
-            r.sprite = rocks[Random.Range(0, rocks.Length)];
-            rockList.Add(g);
-
+            SpawnRock(ranPos);
         }
+    }
+    void SpawnRock(Vector2Int pos){
+        xtraMap.SetTile(new Vector3Int(pos.x-10,pos.y-10,0), rockTiles[Random.Range(0,rockTiles.Length)]);
+    }
+    void SpawnRock(Vector2Int pos, int type){
+        xtraMap.SetTile(new Vector3Int(pos.x-10,pos.y-10,0), rockTiles[type]);
     }
     
 }

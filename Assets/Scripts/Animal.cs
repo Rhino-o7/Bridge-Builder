@@ -5,11 +5,12 @@ using UnityEngine;
 
 public class Animal : MonoBehaviour
 {
-    //void OnColl
+    
     Animator animator;
     AudioSource audioSource;
-    [SerializeField] AudioClip meow;
+    [SerializeField] AudioClip[] meow;
     [SerializeField] AudioClip found;
+    [SerializeField] GameObject soundWave;
     bool playMeow = true;
     void Awake(){
         int rand1 = Random.Range(1,4);
@@ -37,9 +38,15 @@ public class Animal : MonoBehaviour
     }
 
     IEnumerator MeowSound(){
+        bool first = true;
         while (playMeow){
-            audioSource.PlayOneShot(meow);
-            yield return new WaitForSeconds(Random.Range(5, 30));
+            if (first){
+                first = false;
+                yield return new WaitForSeconds(Random.Range(1,5));
+            }
+            audioSource.PlayOneShot(meow[Random.Range(0,meow.Length)]);
+            GameObject g = Instantiate(soundWave, transform);
+            yield return new WaitForSeconds(Random.Range(5, 25));
         }
     }
 
