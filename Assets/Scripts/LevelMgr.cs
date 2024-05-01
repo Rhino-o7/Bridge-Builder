@@ -189,11 +189,17 @@ public class LevelMgr : MonoBehaviour
         playerMove.audioSource.Stop();
         enterFunction = Resume;
         Time.timeScale = 0;
-        
+        inputs.Player.Restart.performed += EndFromPause;
         
         
     }
+    void EndFromPause(InputAction.CallbackContext c){
+        inputs.Player.Restart.performed -= EndFromPause;
+        Resume();
+        EndLevel(false);
+    }
     public void Resume(){
+        inputs.Player.Restart.performed -= EndFromPause;
         pauseMenu.SetActive(false);
         bridgeBuilder.enabled = true;
         playerMove.canMove = true;
